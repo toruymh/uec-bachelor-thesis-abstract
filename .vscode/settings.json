@@ -1,0 +1,92 @@
+{
+    // LaTeX Workshop設定
+    "latex-workshop.latex.autoBuild.run": "onSave",
+    "latex-workshop.view.pdf.viewer": "tab",
+    "latex-workshop.synctex.afterBuild.enabled": true,
+    "latex-workshop.view.pdf.refresh.viewer": "auto",
+    "latex-workshop.view.pdf.refresh.delay": 1000,
+    "latex-workshop.view.pdf.zoom": "auto",
+    "latex-workshop.view.pdf.scrollMode": 0,
+    "latex-workshop.view.pdf.spreadMode": 0,
+    
+    // LaTeX Workshop レシピとツールの設定
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "latexmk (platex->dvipdfmx)",
+            "tools": ["latexmk_platex"]
+        }
+    ],
+    "latex-workshop.latex.tools": [
+        {
+            "name": "latexmk_platex",
+            "command": "latexmk",
+            "args": [
+                "-f",
+                "-gg",
+                "-latex=platex",
+                "-pdfdvi",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "-synctex=1",
+                "-outdir=out",
+                "%DOC%"
+            ],
+            "env": {}
+        }
+    ],
+    
+    // 自動クリーンアップとプレビュー更新
+    "latex-workshop.latex.autoClean.run": "onBuilt",
+    "latex-workshop.latex.clean.fileTypes": [
+        "*.aux",
+        "*.bbl",
+        "*.blg",
+        "*.idx",
+        "*.ind",
+        "*.lof",
+        "*.lot",
+        "*.out",
+        "*.toc",
+        "*.acn",
+        "*.acr",
+        "*.alg",
+        "*.glg",
+        "*.glo",
+        "*.gls",
+        "*.fls",
+        "*.log",
+        "*.fdb_latexmk",
+        "*.synctex.gz"
+    ],
+    
+    // プレビューの自動更新とリフレッシュ
+    "latex-workshop.view.pdf.hand": true,
+    "latex-workshop.view.pdf.internal.synctex.keybinding": "double-click",
+    "latex-workshop.view.pdf.ref.viewer": "auto",
+    "latex-workshop.view.pdf.tab.editorGroup": "right",
+    
+    // チェンジ監視とコンパイル
+    "latex-workshop.latex.watch.delay": 250,
+    "latex-workshop.latex.build.forceRecipeUsage": false,
+    "latex-workshop.latex.build.clearLog.everyRecipeStep.enabled": false,
+    "latex-workshop.latex.outDir": "%DIR%/out",
+    
+    // PDFファイルの関連付けとプレビュー設定
+    "workbench.editorAssociations": {
+        "*.pdf": "latex-workshop-pdf-hook"
+    },
+    
+    // macOSでのファイル関連付けを無効化
+    "files.associations": {
+        "*.pdf": "latex-workshop-pdf-hook"
+    },
+    
+    // LaTeX Workshop のプレビューを強制的に使用（外部ビューアを無効化）
+    "latex-workshop.view.pdf.external.viewer.command": "",
+    "latex-workshop.view.pdf.external.viewer.args": [],
+    "latex-workshop.view.pdf.external.synctex.command": "",
+    "latex-workshop.view.pdf.external.synctex.args": [],
+    
+    // pLaTeX を強制的に使用
+    "latex-workshop.latex.recipe.default": "latexmk (platex->dvipdfmx)"
+}

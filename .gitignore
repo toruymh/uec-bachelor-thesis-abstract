@@ -1,0 +1,58 @@
+# 和文LaTeX論文執筆環境用 .gitignore
+
+# LaTeX出力ディレクトリ
+out/
+
+# LaTeX中間・出力ファイル
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bbl
+*.blg
+*.nav
+*.snm
+*.vrb
+*.xdv
+*.dvi
+*.ps
+*.idx
+*.ind
+*.acn
+*.acr
+*.alg
+*.glg
+*.glo
+*.gls
+*.ist
+
+# PDF（プロジェクトに応じてコメントアウト）
+*.pdf
+
+# バックアップファイル
+*~
+*.bak
+*.tmp
+*.backup
+
+# OS固有ファイル
+.DS_Store
+Thumbs.db
+
+# エディタ固有ファイル
+.vscode/launch.json
+.vscode/c_cpp_properties.json
+.vscode/settings.json.backup*
+
+# 一時ファイル
+*.swp
+*.swo
+*.temp
+
+# 個人設定ファイル
+.latexmkrc.local
