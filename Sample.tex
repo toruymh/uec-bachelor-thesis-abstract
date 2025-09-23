@@ -34,50 +34,29 @@
 \section{はじめに}
 
 近年ニーズが高まっている個別適応的な学習支援やCBT(Computer Based Testing)などに基づく高度なテスト運用においては，難易度や識別力などの特性が既知のテスト問題（以降，項目と呼ぶ）が重要な役割を果たす．
-一般に，受験者や学習者(以降，受験者に統一)を集めて行われた事前テストから項目を推定するが，この実施には多大なコストがかかる上に項目内容の漏洩リスクも生じる．
-%----%
+例えば，知的学習支援システムでは，学習者の能力にあった難易度の項目を適応的に出題する機能が重要要件の一つとなるが，この実現のためには各項目の難易度が既知である必要がある．
+またCBTでは，異なる項目群で構成されるにも関わらず統計的な性質が類似したテスト版を多数構成して活用することで，
+高精度な能力測定を担保しつつ不正防止や試験結果の年度間比較などが実現されるが，このためにも各項目の特性が既知である必要がある．
+そのため，これらの場面では，予め目標の母集団から受験者や学習者(以降，受験者に統一)を集めて関心下の項目を出題し，得られた反応データから項目特性を推定する「事前テスト」が一般に行われる．
+しかし，事前テストの実施には多大なコストがかかる上に項目内容の漏洩リスクも生じる．
 
 この問題を解決するために，自然言語処理技術を用いて問題文から項目特性を推定する方法論が研究されている\cite{uto2024question,benedetto-etal-2024-using}．
-%----%
-古典的な教師あり学習による手法としては，問題文を入力として項目特性値を出力する機械学習モデルを構築する手法が研究されてきた．
-しかしこの方法では，モデル訓練のために必要な，特性値が既知の項目を大量に集めた項目集合を作るために，目的の学習領域に関する大量の項目を目標とする受験者集団に出題して事前に解かせる必要があった．
-このような方法論は，大規模かつ長期間運用されてきた試験や学習支援システム以外では実現が困難であり，活用可能な場面が限定的であった．
-これとは異なる方法論として，近年では，自然言語処理技術の一つである質問応答システムを応用して人間受験者の項目反応を模倣する「仮想受験者」と呼ぶ技術が提案されている．
-例えば，Uto et al.\cite{uto2024question}は性能の異なる多様な大規模言語モデル(Large Language Models)を用いて構築した質問応答システム群を仮想受験者集団とみなす手法を提案している．
+古典的な方法論としては，問題文を入力として項目特性値を出力する機械学習モデルを教師あり学習の枠組みで構築する手法が研究されてきた．しかしこの方法では，モデル訓練のために特性値が既知の項目を大量に用意する必要があり，そのような項目集合を作るために，目的の学習領域に関する大量の項目を目標とする受験者集団に出題して事前に解かせる必要があった．このような方法論は，大規模かつ長期間運用されてきた試験や学習支援システム以外では実現が困難であり，活用可能な場面が限定的であった．これとは異なる方法論として，近年では，自然言語処理技術の一つである質問応答システムを応用して人間受験者の項目反応を模倣する「仮想受験者」と呼ぶ技術が提案されている．
+例えば，性能の異なる多様な大規模言語モデル(Large Language Models)を用いて構築した質問応答システム群を仮想受験者集団とみなす手法が提案されている．
 この方法では，人間受験者の項目反応や特性が既知の項目データセットを利用せずに，仮想受験者を構築できるが，仮想受験者と人間受験者の反応傾向が一致する保証はない．
-%ToDo ↓引用文献を削除したので，文言の修正が必要
-他方で，過去の項目群に対する人間受験者の反応データを用いて質問応答システムを訓練することで仮想受験者を構築する手法を提案している．
-%=====%
+他方で，過去の項目群に対する人間受験者の反応データを用いて質問応答システムを訓練することで仮想受験者を構築する手法も提案されている．
 この方法では，人間受験者の項目反応を模倣させやすい一方で，古典的な方法論と同様に，人間受験者の反応データの収集に多大なコストを要する．
 
-これらの問題に対処できる仮想受験者の実現方法の一つとして，Benedetto et al.\cite{benedetto-etal-2024-using}は，LLMへのプロンプトとして，問題文と共に想定する受験者の特徴を与えることで，ゼロショットで受験者反応を模倣する手法を提案している．しかし，従来手法では，プロンプトに与える受験者の特徴が少数段階の能力レベルの指示のみに留まっており，細やかな知識状態の違いを模倣できていない．
-さらに，従来手法では，LLMによっては，適切にスキルレベルの調整ができないことを示している．これらはいずれも，プロンプトで与える受験者のプロフィールが荒いことに起因すると考えられる．
+これらの問題に対処できる仮想受験者の実現方法の一つとして，Benedetto et al.\cite{benedetto-etal-2024-using}は，LLMへのプロンプトとして，問題文と共に想定する受験者の特徴を与えることで，ゼロショットで受験者反応を模倣する手法を提案している．しかし，従来手法では，プロンプトに与える受験者の特徴が少数段階の能力レベルの指示のみに留まっており，細やかな知識状態の違いを模倣できていない．さらに，従来手法では，LLMによっては，適切にスキルレベルの調整ができないことを示している．これらはいずれも，プロンプトで与える受験者のプロフィールが荒いことに起因すると考えられる．
 
 これらの問題を解決するために，本研究では，個別の受験者がどのような知識・技能を持っているかの詳細な定義を受験者プロフィールとして記述し，その情報をプロンプトとして与えることで，より精密に目標の受験者の反応を予測できる擬似受験者手法を提案する．具体的には，英語の読解力テストを対象に，ヨーロッパ言語共通参照枠（Common
 European Framework of Reference for Languages: CEFR）に基づくA1からC2の各スキルレベルに対応する受験者プロフィールをCEFR Can-Do Statementを参考に設計して，プロンプトに含める．
 
 本研究では，実データ実験を通して提案モデルの有効性を示す．
 
-
 \section{関連研究}
 
-\subsection{LLMを用いた受験者反応推定手法}
-
-近年，大規模言語モデル（Large Language Model, LLM）を教育分野に応用する研究が活発化している中で，LLMを用いて異なるスキルレベルの学習者の試験問題への反応を模擬する手法が提案されている\cite{benedetto-etal-2024-using}.
-この手法では，GPT-3.5やGPT-4などのLLMに対して，特定のスキルレベル（1〜5の5段階）の学習者として振る舞うよう指示するプロンプトを設計し，多肢選択問題（MCQ）への回答を生成させる．
-LLMへの入力は以下の要素で構成される．
-\begin{itemize}
-\item システムプロンプト：模擬する学習者レベルと出力形式の指定
-\item 試験問題のテキスト
-\item 選択肢の一覧
-\item 読解問題の場合は読解パッセージも含む
-\end{itemize}
-また，LLMに期待する出力は，以下の要素を含むJSON形式である．
-\begin{itemize}
-\item 問題の難易度レベル（"question level"）
-\item 選択した回答の説明（"answer explanation"：そのスキルレベルの学習者が辿る思考過程や誤解を含む）
-\item 選択した回答のインデックス（"index"）
-\end{itemize}
+近年，大規模言語モデル（LLM）を用いて異なるスキルレベルの学習者の試験問題への反応を模擬する手法が提案されている\cite{benedetto-etal-2024-using}．この手法では，GPT-3.5やGPT-4などのLLMに対して特定のスキルレベル（1〜5の5段階）の学習者として振る舞うよう指示するプロンプトを設計し，多肢選択問題への回答を生成させる．LLMへの入力はシステムプロンプト（模擬する学習者レベルと出力形式の指定），試験問題のテキスト，選択肢の一覧，読解問題の場合は読解パッセージから構成される．LLMに期待する出力は問題の難易度レベル，選択した回答の説明（そのスキルレベルの学習者が辿る思考過程や誤解を含む），選択した回答のインデックスを含むJSON形式である．
 
 % \textbf{Output (in JSON):}
 % \begin{verbatim}
@@ -88,117 +67,43 @@ LLMへの入力は以下の要素で構成される．
 % }
 % \end{verbatim}
 
-\subsubsection{プロンプト設計と最適化}
-
-先行研究では，プロンプトエンジニアリングによる最適化を通じて，LLMが模擬する学習者レベルごとに現実的な正答率分布を再現できるような参照プロンプト（Reference Prompt: RP）を設計した．
-この最適化では，プロンプトの文言や指示内容，出力形式などを詳細に調整し，LLMが指定されたスキルレベルの学習者として一貫した振る舞いを示すよう工夫されている．
-具体的には，LLMに対して科学試験の多肢選択問題を提示し，1（非常に易しい）から5（非常に難しい）までの難易度スケールで問題を評価し，指定されたレベルの学習者が選ぶであろう回答を選択するよう指示する．
-重要な特徴として，LLMには一度に一つの問題のみが提示され，試験全体や以前の回答に関する情報は与えられない．
-また，一回の応答では一人の学習者のレベルのみを模擬し，複数レベルの回答を同時に提供することはない．
-
-\subsubsection{プロンプト最適化のための評価指標}
-
-プロンプトの最適化では，あるプロンプトを用いて5つのレベル（one, two, three, four, five）を模擬した際の正答率を$L = (a_1, a_2, a_3, a_4, a_5)$，理想的な正答率曲線を$I = (0.0, 0.25, 0.5, 0.75, 1.0)$とする．
-まず，2つの正答率曲線間のピアソン相関係数$\rho_{L,I}$を算出する．次に，非単調性に対するペナルティ$P$を以下の式で計算する．
+先行研究では，プロンプトエンジニアリングによる最適化を通じて，LLMが模擬する学習者レベルごとに現実的な正答率分布を再現できるよう調整が行われた．プロンプトの最適化では，5つのレベルを模擬した際の正答率$L = (a_1, a_2, a_3, a_4, a_5)$と理想的な正答率曲線$I = (0.0, 0.25, 0.5, 0.75, 1.0)$間のピアソン相関係数$\rho_{L,I}$を算出し，非単調性に対するペナルティ$P$を以下の式で計算する．
 
 \begin{equation}
 P = \sum_{i=1}^{4} \sqrt{|a_{i+1} - a_i|} \cdot I(a_{i+1} < a_i)
 \end{equation}
 
-ここで，$I(a_{i+1} < a_i)$は$a_{i+1} < a_i$の場合に1，そうでなければ0となる指示関数である．
-最終的な評価指標$M$は，相関係数からペナルティを差し引いた値として定義される．
+ここで，$I(a_{i+1} < a_i)$は指示関数である．最終的な評価指標$M$は相関係数からペナルティを差し引いた値として定義される．
 
 \begin{equation}
 M = \rho_{L,I} - P
 \end{equation}
 
-この指標により，理想的な単調増加パターンに近く，かつ非単調な振る舞いが少ないプロンプトが高く評価される．
+仮想受験者モデルの妥当性は単調増加性（模擬するスキルレベルの上昇に伴う正答率の単調増加），難易度依存性（同一スキルレベルでより困難な問題での正答率低下），仮想プレテストの妥当性（仮想受験者による問題困難度推定と実際の受験者による困難度との相関）の観点から評価される．
 
-\subsubsection{仮想受験者モデルの妥当性評価}
-
-最適化されたプロンプトを用いた仮想受験者モデルの妥当性は，以下の観点から評価される．
-
-\begin{enumerate}
-\item \textbf{単調増加性}: 模擬するスキルレベルが上がるにつれて，MCQAの正答率が単調増加すること
-\item \textbf{難易度依存性}: 同一の模擬するスキルレベルにおいて，より困難な問題で正答率が低下すること
-\item \textbf{仮想プレテストの妥当性}: 仮想受験者による問題困難度推定と、実際の受験者による困難度との相関
-\end{enumerate}
-
-特に，$CUP\&A$データセットでは実際の受験者による困難度データが利用可能であり，5名の仮想受験者による困難度推定との相関係数0.13が得られた．
-これは統計的に有意であり（$p = 0.06$），ランダムベースライン（相関係数$-0.03$，$p = 0.62$）を上回る結果である．
-
-\subsubsection{従来手法による実験結果}
-
-$ARC$（科学試験問題），$RACE$，$RACE-c$，$CUP\&A$（英語読解問題）の3つのデータセットでの実験では，GPT-3.5を用いた場合に模擬レベルの増加に伴う正答率の単調増加が確認された．
-ただし，プロンプトエンジニアリングを行ったGPT-3.5の特定バージョンでの成果は，他のLLM（GPT-4や異なるバージョンのGPT-3.5）には十分に汎化しないことも明らかになった．
+実験では，GPT-3.5を用いた場合に模擬レベルの増加に伴う正答率の単調増加が確認されたが，プロンプトエンジニアリングを行ったGPT-3.5の特定バージョンでの成果は他のLLMには十分に汎化しないことが明らかになった．この汎化性の不足は，プロンプトで与える受験者プロフィールが荒いことに起因すると考えられる．
 
 \section{提案手法}
 
-従来手法には以下のような課題がある．
-第一に，仮想受験者のスキルレベルが客観的でない．1から5までのスキルレベルが，具体的にどのような知識状態を仮定しているのかあいまいであるため，
-第二に，GPT-4など高性能なモデルにおいて，プロンプト最適化の効果が限定的であり，低スキルレベルの受験者反応を模倣できていない．
-人間受験者の項目反応と比較が難しい．
-そこで本研究では，仮想受験者のスキルレベルをCEFR Global ScaleのA2~C2の5段階を想定し，読解問題の正答に必要な知識・技能といった受験者プロフィールを精緻化してプロンプトに与えることで，
-高性能なLLMモデルであっても，妥当な受験者反応を模倣できる手法を提案する．
-具体的には，CEFR Can-Do Descriptorsを参考に，読解問題の正答に必要な知識・技能を各スキルレベルごとに整理し，プロンプトに与える．
-また，各スキルレベルに応じた語彙レベルの制限を設けることで，より現実的な受験者反応を模倣できるようにする．
+従来手法では，仮想受験者のスキルレベルが1から5の数値のみで記述されており，具体的な知識状態が不明確であるため，人間受験者の項目反応との比較が困難である．また，GPT-4など高性能なモデルでは，プロンプト最適化の効果が限定的で，低スキルレベルの受験者反応を適切に模倣できていない．
 
-\section{使用データセット}
+本研究では，CEFR Global ScaleのA2〜C2に対応する詳細な受験者プロフィールをプロンプトに追加することで，高性能なLLMでも妥当な受験者反応を模倣できる手法を提案する．具体的には，CEFR Can-Do Descriptorsを参考に，読解問題の正答に必要な知識・技能を各スキルレベルごとに整理し，各レベルに応じた語彙制限とともにプロンプトに含める．
 
-再現実験では，RACEデータセットを用いた．
-RACEデータセットは英語読解問題の多肢選択式問題（MCQA）データセットである．本研究では，先行研究と同様に元のRACE\cite{lai2017race}とRACE-c\cite{liang2019new}をマージして得られたバージョンを使用している． 
-データセット内の各問題には3つのレベル（middle, high, college）のいずれかが割り当てられており，これは対象学生の学校レベルを示している．
-先行研究では問題難易度の代理指標として使用されており，
-middleが最低難易度，collegeが最高難易度とされている．
-再現実験では，先行研究と同様に，テスト分割から層化サンプリングによって得られた150問の縮小セットを使用し，各レベルにつき50問ずつを保持している．
+\section{実験}
 
-% \section{実験手順}
-%% 提案手法と実験
+\textbf{使用データセット}　再現実験では，RACEデータセットを用いた．RACEは英語読解問題の多肢選択式問題データセットで，各問題には3つのレベル（middle, high, college）が割り当てられており，middleが最低難易度，collegeが最高難易度とされている．先行研究と同様に，テスト分割から層化サンプリングによって得られた150問の縮小セット（各レベル50問ずつ）を使用した．
 
+\textbf{実験手順}　先行研究で用いられたプログラムを一部改変し，以下の手順で実施した．まず，gpt-3.5-turbo-1106を用いて先行研究のプロンプトによる再現実験を行い，LLMの回答と正答から正答率を算出した．次に，より高性能なgpt-4o-miniで同様の実験を実施し，低スキルレベル学習者の正答率が高くなる問題と単調増加性の破綻を確認した．さらに，CEFR Can-Do Statementを追加したプロンプトを用いてgpt-4o-miniで実験を行った．
 
-再現実験は，先行研究で用いられたプログラムを一部改変し，以下の手順で実施した．
+\textbf{使用プロンプト}　再現実験では先行研究のプロンプトを使用し，提案手法では以下に示すようにCEFR Can-Do Statementの詳細な受験者プロフィールを追加したプロンプトを用いた．
 
-まずはじめに，先行研究で用いられたプログラムとプロンプトを用いて，現在使用できないgpt-3.5-0613ではなく，gpt-3.5-turbo-1106に回答させ, LLMの回答と元データセットの正答から正答率を算出した．
-次に，先行研究で用いられたプログラムとプロンプトを用いて，より高性能なモデルであるgpt-4o-miniに回答させ，同様に正答率を算出した．
-具体的には，gpt-3.5-turbo-1106と比較して，低いスキルレベル学習者の正答率が高くなる点，単調増加性が維持されない点を確認した．
-さらに，先行研究で用いられたプログラムとgpt-4o-miniを用いて，CEFR descriptorを元にしたCan-Do Statementを追加したプロンプトを用いて回答させ，同様に正答率を算出した．
-
-\section{実験手順}
-
-再現実験は，先行研究で用いられたプログラムを一部改変し，以下の手順で実施した．
-
-まずはじめに，先行研究で用いられたプログラムとプロンプトを用いて，現在使用できないgpt-3.5-0613ではなく，gpt-3.5-turbo-1106に回答させ, LLMの回答と元データセットの正答から正答率を算出した．
-次に，先行研究で用いられたプログラムとプロンプトを用いて，より高性能なモデルであるgpt-4o-miniに回答させ，同様に正答率を算出した．
-具体的には，gpt-3.5-turbo-1106と比較して，低いスキルレベル学習者の正答率が高くなる点，単調増加性が維持されない点を確認した．
-さらに，先行研究で用いられたプログラムとgpt-4o-miniを用いて，CEFR descriptorを元にしたCan-Do Statementを追加したプロンプトを用いて回答させ，同様に正答率を算出した．
-
-\section{使用したプロンプト}
-
-再現実験で使用したプロンプトを以下に示す．
-
-% \noindent\rule{\linewidth}{0.4pt} % 横棒（上）
-% \begin{lstlisting}[caption={先行研究で用いられたプロンプト}]
-% You will be shown a multiple choice question from an English reading comprehension exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
-% You must assign a difficulty level to the given multiple choice question, and select the answer choice that a student of CEFR level {student_level} would pick.
-% A student of CEFR level {student_level} {get_cefr_levels_description(student_level)}.
-% Provide only a JSON file with the following structure:
-% {{"question level": "difficulty level of the question", "answer explanation": "the list of steps that the students of CEFR level {student_level} would follow to select the answer, including the misconceptions that might cause them to make mistakes", "index": "integer index of the answer chosen by a student of CEFR level {student_level}"}}
-% \end{lstlisting}
-% \noindent\rule{\linewidth}{0.4pt} % 横棒（下）
-
-% \newpage
-\noindent\rule{\linewidth}{0.4pt} % 横棒（上）
+\noindent\rule{\linewidth}{0.4pt}
 \begin{lstlisting}[caption={CEFR Can-Do Statementを追加したプロンプト}]
 You will be shown a multiple choice question from an English reading comprehension exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).You must assign a difficulty level to the given multiple choice question, and select the answer choice that a student of CEFR level {student_level} would pick.A student of CEFR level {student_level} {get_cefr_levels_detailed_description(student_level)}.Provide only a JSON file with the following structure:{{"question level": "difficulty level of the question", "answer explanation": "the list of steps that the students of CEFR level {student_level} would follow to select the answer, including the misconceptions that might cause them to make mistakes", "index": "integer index of the answer chosen by a student of CEFR level {student_level}"}}
 \end{lstlisting}
-\noindent\rule{\linewidth}{0.4pt} % 横棒（下）
+\noindent\rule{\linewidth}{0.4pt}
 
-\section{実験結果}
-
-実験結果は以下の通りであった．
-
-%%% gpt-3_5_turbo_1106の結果を2枚添付
-\subsection{gpt-3.5-turbo-1106による再現}
+\textbf{実験結果}　図\ref{fig:gpt-3-5}に示すように，gpt-3.5-turbo-1106では，CEFRレベルの上昇に伴い正答率が単調増加する傾向が確認されたが，C1レベルでB2レベルより正答率が低くなり，単調増加性が完全には満たされなかった．図\ref{fig:gpt-4o-mini}に示すように，gpt-4o-miniでは，C2レベルで他スキルレベルより大幅な正答率低下が観測された．図\ref{fig:comparison}の比較では，両モデルとも異なるレベルで単調増加性の破綻が確認され，先行研究で指摘された最適化プロンプトの他LLMモデルへの汎化性不足が再現された．
 
 \begin{figure}[h]
 \centering
@@ -220,18 +125,6 @@ You will be shown a multiple choice question from an English reading comprehensi
 \label{fig:gpt-3-5}
 \end{figure}
 
-
-
-%%% gpt-3_5_turbo_1106の結果について説明
-
-図\ref{fig:gpt-3-5}に示すように，gpt-3.5-turbo-1106では，CEFRレベルの上昇に伴い正答率が単調増加する傾向が確認された．
-しかし，C1レベルは下位のB2レベルより正答率が低くなっており，単調増加性が完全には満たされなかった．
-先行研究では，gpt-3.5-turbo-0613で最適化されたプロンプトの性能が，他のLLMモデルでは十分に汎化されないことが示されており，この結果はその傾向が再現された．
-
-\subsection{gpt-4o-miniによる再現}
-
-%%% gpt-4o-mini の結果を2枚添付
-
 \begin{figure}[h]
 \centering
 \begin{minipage}[b]{0.49\columnwidth}
@@ -251,16 +144,6 @@ You will be shown a multiple choice question from an English reading comprehensi
 \caption{GPT-4o-miniの実験結果}
 \label{fig:gpt-4o-mini}
 \end{figure}
-
-
-%%% gpt-40-miniの結果について説明
-
-図\ref{fig:gpt-4o-mini}に示すように，gpt-4o-miniでは，CEFRレベルの上昇に伴い正答率が単調増加する傾向は一部確認された．
-具体的には，図\ref{fig:gpt-4o-mini-1}の通り，B1レベルでは，middleレベルよりhighレベルの正答率が高くなった．
-また，C2レベルでは，middle，highレベルの正答率がほぼ同等となっており，またすべての難易度において正答率が低下している．
-C2レベルはCEFR Global Scaleの最上位レベルであり，このレベルの学習者で正答率が他レベルより低下していたため，受験者反応を模倣できていなかった．
-
-%% gpt-3_5_turbo_1106とgpt_4o_miniの結果を2枚添付
 
 \begin{figure}[h]
 \centering
@@ -282,23 +165,22 @@ C2レベルはCEFR Global Scaleの最上位レベルであり，このレベル�
 \label{fig:comparison}
 \end{figure}
 
-%% gpt-3_5_turbo_1106とgpt_4o_miniの結果を比較して説明
+% \noindent\rule{\linewidth}{0.4pt} % 横棒（上）
+% \begin{lstlisting}[caption={先行研究で用いられたプロンプト}]
+% You will be shown a multiple choice question from an English reading comprehension exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
+% You must assign a difficulty level to the given multiple choice question, and select the answer choice that a student of CEFR level {student_level} would pick.
+% A student of CEFR level {student_level} {get_cefr_levels_description(student_level)}.
+% Provide only a JSON file with the following structure:
+% {{"question level": "difficulty level of the question", "answer explanation": "the list of steps that the students of CEFR level {student_level} would follow to select the answer, including the misconceptions that might cause them to make mistakes", "index": "integer index of the answer chosen by a student of CEFR level {student_level}"}}
+% \end{lstlisting}
+% \noindent\rule{\linewidth}{0.4pt} % 横棒（下）
 
-図\ref{fig:comparison}に示すように，gpt-3.5-turbo-1106とgpt-4o-miniのスキルレベル別正答率を比較すると，
-gpt-3.5-turbo-1106では，C1レベルの正答率がすべての難易度で単調増加性を満たしていなかった．
-gpt-4o-miniでは，C2レベルの正答率が他スキルレベルよりも大きく低下しており，単調増加性を満たしていなかった．
-以上より，再現実験では, 先行研究において指摘された，最適化されたプロンプトの性能が他のLLMモデルに十分に汎化されない傾向が再現された．
+
 
 
 \section{まとめ}
 
-本レポートでは，LLMを用いた仮想受験者モデルの精度向上手法として，
-CEFR Global Scaleに基づく受験者プロフィールの精緻化によって高性能なLLMであっても妥当な受験者反応を模倣できる手法を提案した．
-今後の展望として，英文読解問題の正答に必要な知識・技能のうち，振る舞いと語彙力以外の要素をスキルレベルごとにプロンプトに与えることで，
-より精緻な受験者プロフィールを構築し，妥当な受験者反応を模倣できるか検証する．
-また，正答に必要な知識だけでなく，スキルレベルに応じた誤答を選択する根拠もプロンプトに与えることで，
-より現実的な受験者反応を模倣できるか検証する．
-さらに，提案手法を他のデータセットや他の言語モデルに適用し，その汎化性を検証する． 
+本研究では，LLMを用いた仮想受験者モデルの精度向上のため，CEFR Can-Do Statementに基づく詳細な受験者プロフィールをプロンプトに追加する手法を提案した．再現実験により，従来手法では最適化されたプロンプトが他のLLMモデルに汎化しない問題を確認し，より精緻な受験者プロフィールによる改善の必要性を示した．今後は提案手法の実装と有効性検証，他データセットでの汎化性確認を行う予定である． 
 
 {\small
 \begin{thebibliography}{99}
