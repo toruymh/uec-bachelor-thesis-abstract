@@ -47,7 +47,8 @@
 しかし，事前テストの実施には多大なコストがかかる上に項目内容の漏洩リスクも生じる．
 
 この問題を解決するために，自然言語処理技術を用いて問題文から項目特性を推定する方法論が研究されている．
-古典的な方法論としては，問題文を入力として項目特性値を出力する機械学習モデルを教師あり学習の枠組みで構築する手法が研究されてきた．しかしこの方法では，モデル訓練のために特性値が既知の項目を大量に用意する必要があり，そのような項目集合を作るために，目的の学習領域に関する大量の項目を目標とする受験者集団に出題して事前に解かせる必要があった．このような方法論は，大規模かつ長期間運用されてきた試験や学習支援システム以外では実現が困難であり，活用可能な場面が限定的であった
+古典的な方法論としては，問題文を入力として項目特性値を出力する機械学習モデルを教師あり学習の枠組みで構築する手法が研究されてきた\cite{devlin2018bert,benedetto2023quantitative}．
+しかしこの方法では，モデル訓練のために特性値が既知の項目を大量に用意する必要があり，そのような項目集合を作るために，目的の学習領域に関する大量の項目を目標とする受験者集団に出題して事前に解かせる必要があった．このような方法論は，大規模かつ長期間運用されてきた試験や学習支援システム以外では実現が困難であり，活用可能な場面が限定的であった
 
 これとは異なる方法論として，近年では，自然言語処理技術の一つである質問応答システムを応用して人間受験者の項目反応を模倣する「仮想受験者」と呼ぶ技術が提案されている\cite{tomikawa2024adaptive,uto2024question,benedetto-etal-2024-using}．
 例えば，性能の異なる多様な大規模言語モデル(Large Language Models)を用いて構築した質問応答システム群を仮想受験者集団とみなす手法が提案されている\cite{tomikawa2024adaptive}．
@@ -153,8 +154,8 @@ RACEの各問題には3つの大まかな難易度レベル（middle, high, coll
 % \bibitem{baker2004item} F. B. Baker, S.-H. Kim, \textit{Item Response Theory: Parameter Estimation Techniques}, CRC Press, 2004.
 % \bibitem{van1996handbook} W. J. van der Linden, R. K. Hambleton, \textit{Handbook of Modern Item Response Theory}, Springer New York, 1996.
 % \bibitem{kolen2014test} M. J. Kolen, R. L. Brennan, \textit{Test Equating, Scaling, and Linking}, Springer New York, 2014.
-% \bibitem{devlin2018bert} J. Devlin, M.-W. Chang, K. Lee, K. Toutanova, ``BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding", arXiv preprint arXiv:1810.04805, 2018.
-% \bibitem{benedetto2023quantitative} L. Benedetto, ``A quantitative study of NLP approaches to question difficulty estimation", Proceedings of the International Conference on Artificial Intelligence in Education, pp.428--434, 2023.
+\bibitem{devlin2018bert} J. Devlin, M.-W. Chang, K. Lee, K. Toutanova, ``BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding", arXiv preprint arXiv:1810.04805, 2018.
+\bibitem{benedetto2023quantitative} L. Benedetto, ``A quantitative study of NLP approaches to question difficulty estimation", Proceedings of the International Conference on Artificial Intelligence in Education, pp.428--434, 2023.
 % \bibitem{gao2019difficulty} Y. Gao, L. Bing, W. Chen, M. Lyu, I. King, ``Difficulty Controllable Generation of Reading Comprehension Questions", Proc. Twenty-Eighth International Joint Conf. Artificial Intelligence, pp.4968--4974, 2019.
 % \bibitem{byrd2022predicting} M. Byrd, S. Srivastava, ``Predicting difficulty and discrimination of natural language questions", Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics, pp.119--130, 2022.
 \bibitem{tomikawa2024adaptive} Y. Tomikawa, A. Suzuki, M. Uto, ``Adaptive Question–Answer Generation With Difficulty Control Using Item Response Theory and Pretrained Transformer Models", IEEE Transactions on Learning Technologies, Vol.17, pp.2186--2198, 2024.
