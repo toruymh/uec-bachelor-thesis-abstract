@@ -115,30 +115,16 @@ M = \rho_{L,I} - P
 
 \section{実験}
 
-本実験の目的は，先行研究のプログラムコードを用いて再現実験を行うことである．ただし，LLMモデルとして先行研究で用いられたgpt-3.5-turbo-0613ではなく，より新しいgpt-3.5-turbo-1106を使用した．
+現在までには，実データを用いて従来手法の再現実験を行った．
 
-再現実験では，RACEデータセットを用いた．RACEは英語読解問題の多肢選択式問題データセットで，各問題には3つのレベル（middle, high, college）が割り当てられており，middleが最低難易度，collegeが最高難易度とされている．先行研究と同様に，テスト分割から層化サンプリングによって得られた150問の縮小セット（各レベル50問ずつ）を使用した．
+実データとしては，英語読解問題の多肢選択式問題データセットとして様々な言語処理研究でベンチマークデータとして利用されるRACEデータセットを用いた．
+RACEの各問題には3つの大まかな難易度レベル（middle, high, college）が割り当てられており，これをもとに難易度依存性の観点が分析できる．
+本実験では，先行研究と同様に，層化サンプリングによって得られた，難易度レベルごとに50問ずつ，累計150問のデータを用いた．
 
-先行研究で用いられたプログラムを一部改変し，以下の手順で実施した．まず，gpt-3.5-turbo-1106を用いて先行研究のプロンプトによる再現実験を行い，LLMの回答と正答から正答率を算出した．次に，より高性能なgpt-4o-miniで同様の実験を実施し，低受験者レベルの正答率が高くなる問題と単調増加性の破綻を確認した．さらに，CEFR Can-Do Statementを追加したプロンプトを用いてgpt-4o-miniで実験を行った．
-再現実験では先行研究のプロンプトを使用した．
+この150問を，提案手法と同様にA1からC2までの6段階の受験者レベルをそれぞれ指定した従来手法に解かせ，その平均正答率を算出した．ベースとなるLLMとしては，先行研究で用いられたgpt-3.5-turbo-0613の提供が終了していたため，より新しいgpt-3.5-turbo-1106 を使用した．さらに，より新しいLLMとして，GPT-4o-miniを利用する実験も行った．
 
-% \begin{lstfloat}[h]
-% \noindent\rule{\linewidth}{0.4pt}
-% \begin{lstlisting}[caption={CEFR Can-Do Statementを追加したプロンプト}]
-% You will be shown a multiple choice question from an English reading comprehension exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).You must assign a difficulty level to the given multiple choice question, and select the answer choice that a student of CEFR level {student_level} would pick.A student of CEFR level {student_level} {get_cefr_levels_detailed_description(student_level)}.Provide only a JSON file with the following structure:{{"question level": "difficulty level of the question", "answer explanation": "the list of steps that the students of CEFR level {student_level} would follow to select the answer, including the misconceptions that might cause them to make mistakes", "index": "integer index of the answer chosen by a student of CEFR level {student_level}"}}
-% \end{lstlisting}
-% \begin{lstlisting}[caption={先行研究で用いられたプロンプト}]
-% You will be shown a multiple choice question from an English reading comprehension exam, and the questions in the exam have difficulty levels on a scale from one (very easy) to five (very difficult).
-% You must assign a difficulty level to the given multiple choice question, and select the answer choice that a student of CEFR level {student_level} would pick.
-% A student of CEFR level {student_level} {get_cefr_levels_description(student_level)}.
-% Provide only a JSON file with the following structure:
-% {{"question level": "difficulty level of the question", "answer explanation": "the list of steps that the students of CEFR level {student_level} would follow to select the answer, including the misconceptions that might cause them to make mistakes", "index": "integer index of the answer chosen by a student of CEFR level {student_level}"}}
-% \end{lstlisting}
-% \noindent\rule{\linewidth}{0.4pt}
-% \end{lstfloat}
-
-再現実験の結果を図\ref{fig:gpt-3-5}および\ref{fig:gpt-4o-mini}に示す．
-図\ref{fig:gpt-3-5}および図\ref{fig:gpt-4o-mini}は，それぞれgpt-3.5-turbo-1106とgpt-4o-miniに150問の縮小セットを回答させた際の，項目難易度別・受験者レベル別の正答率をサブプロットとして示している．
+提案手法の実験結果を図\ref{fig:gpt-3-5}と\ref{fig:gpt-4o-mini}に示す．
+図\ref{fig:gpt-3-5}および図\ref{fig:gpt-4o-mini}は，それぞれgpt-3.5-turbo-1106 とgpt-4o-mini の項目難易度別・受験者レベル別の正答率をサブプロットとして示している．
 縦軸は正答率，横軸はLLMに指定した受験者レベルと項目難易度の組合せを表す．
 図\ref{fig:gpt-3-5}より，gpt-3.5-turbo-1106では，同一受験者レベル内で，項目の難易度が上がるにつれて正答率が低下する難易度依存性が確認された．
 一方で，能力の高い受験者と能力の低い受験者で正答率が一部逆転しており，単調増加性の破綻が再現された．
