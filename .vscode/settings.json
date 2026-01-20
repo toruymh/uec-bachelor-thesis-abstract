@@ -1,4 +1,10 @@
 {
+      "github.copilot.chat.customInstructionsPath": ".github/copilot-instructions.md",
+  "github.copilot.chat.commitMessageGeneration.instructions": [
+    {
+      "text": "日本語で，Conventional Commits形式でコミットメッセージを生成してください．形式: <type>(<scope>): <subject>．使用可能なtype: feat(新機能), fix(バグ修正), docs(ドキュメント), style(フォーマット), refactor(リファクタリング), test(テスト), chore(その他)．scopeは省略可能，subjectは50文字以内，日本語で記述してください．"
+    }
+  ],
     // LaTeX Workshop設定
     "latex-workshop.latex.autoBuild.run": "onSave",
     "latex-workshop.view.pdf.viewer": "tab",
