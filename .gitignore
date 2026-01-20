@@ -56,3 +56,9 @@ Thumbs.db
 
 # 個人設定ファイル
 .latexmkrc.local
+
+# 画像ファイル（大きなEPS/PNG）
+img/**/*.eps
+img/**/*.png
+img/**/*.jpg
+img/**/*.jpeg
