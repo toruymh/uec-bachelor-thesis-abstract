@@ -69,14 +69,6 @@ European Framework of Reference for Languages: CEFR）に基づくA1からC2の�
 この手法では，GPT-3.5やGPT-4などのLLMに対して特定の受験者レベル（1〜5の5段階）の受験者として振る舞うよう指示するプロンプトを与えることで，多肢選択問題への回答を生成させる．
 LLMへの入力は目的とする受験者レベルと対象とする項目の問題文と選択肢のテキスト，および出力形式に関わる指示と読解問題の場合は読解パッセージから構成される．
 出力指示では正当選択肢のインデックスに加え，項目の難易度レベルと回答プロセスの根拠説明（指定された受験者レベルが当該問題で辿る思考過程や誤解の説明）を出力させるようにしている．
-% \textbf{Output (in JSON):}
-% \begin{verbatim}
-% {
-%   "question_level": <question_level>,
-%   "answer_explanation": "<answer_explanation>",
-%   "index": <index>
-% }
-% \end{verbatim}
 
 先行研究では，LLMが目的の受験者レベルに適した正答率分布を再現できるように，プロンプトエンジニアリングによる最適化を行っている．
 具体的には，まず，5つの受験者レベルをそれぞれ指定したときの項目正答率をそれぞれ$a_1, a_2, a_3, a_4, a_5$（$a_i$はレベル$i$を指定した時の全項目にわたる正解率を意味する）とするとき，ベクトル$L = (a_1, a_2, a_3, a_4, a_5)$と理想的な正答率$I = (0.0, 0.25, 0.5, 0.75, 1.0)$ とのピアソン相関係数$\rho_{L,I}$を算出する．
@@ -87,7 +79,6 @@ P = \sum_{i=1}^{4} \sqrt{|a_{i+1} - a_i|} \cdot I(a_{i+1} < a_i)
 \end{equation}
 
 \noindent ここで，$I(a_{i+1} < a_i)$は$a_{i+1} < a_i$の場合に1，そうでなければ0となる指示関数である．
-% 最終的な評価指標$M$は相関係数からペナルティを差し引いた値として次式で定義される．
 そして，最終的な評価指標M を次式で計算し，これが最大化されるようにプロンプトの最適化を行なっている．
 
 \begin{equation}
@@ -150,22 +141,12 @@ RACEの各問題には3つの大まかな難易度レベル（middle, high, coll
 
 {\small
 \begin{thebibliography}{99}
-% \bibitem{ueno2018irt} 植野真臣, 宮澤芳光, ``IRT-Based Adaptive Hints to Scaffold Learning in Programming", IEEE Transactions on Learning Technologies, Vol.11, No.4, pp.415--428, 2018.
-% \bibitem{baker2004item} F. B. Baker, S.-H. Kim, \textit{Item Response Theory: Parameter Estimation Techniques}, CRC Press, 2004.
-% \bibitem{van1996handbook} W. J. van der Linden, R. K. Hambleton, \textit{Handbook of Modern Item Response Theory}, Springer New York, 1996.
-% \bibitem{kolen2014test} M. J. Kolen, R. L. Brennan, \textit{Test Equating, Scaling, and Linking}, Springer New York, 2014.
 \bibitem{devlin2018bert} J. Devlin, M.-W. Chang, K. Lee, K. Toutanova, ``BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding", arXiv preprint arXiv:1810.04805, 2018.
 \bibitem{benedetto2023quantitative} L. Benedetto, ``A quantitative study of NLP approaches to question difficulty estimation", Proceedings of the International Conference on Artificial Intelligence in Education, pp.428--434, 2023.
-% \bibitem{gao2019difficulty} Y. Gao, L. Bing, W. Chen, M. Lyu, I. King, ``Difficulty Controllable Generation of Reading Comprehension Questions", Proc. Twenty-Eighth International Joint Conf. Artificial Intelligence, pp.4968--4974, 2019.
-% \bibitem{byrd2022predicting} M. Byrd, S. Srivastava, ``Predicting difficulty and discrimination of natural language questions", Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics, pp.119--130, 2022.
 \bibitem{tomikawa2024adaptive} Y. Tomikawa, A. Suzuki, M. Uto, ``Adaptive Question–Answer Generation With Difficulty Control Using Item Response Theory and Pretrained Transformer Models", IEEE Transactions on Learning Technologies, Vol.17, pp.2186--2198, 2024.
 
 \bibitem{uto2024question} M. Uto, Y. Tomikawa, A. Suzuki, ``Question Difficulty Prediction Based on Virtual Test-Takers and Item Response Theory", AIED'24: Workshop on Automatic Evaluation of Learning and Assessment Content, pp.1--11, 2024.
 \bibitem{benedetto-etal-2024-using} L. Benedetto, G. Aradelli, A. Donvito, A. Lucchetti, A. Cappelli, P. Buttery, ``Using LLMs to simulate students' responses to exam questions", Findings of the Association for Computational Linguistics: EMNLP 2024, pp.11351--11368, 2024.
-% \bibitem{lai2017race} G. Lai, Q. Xie, H. Liu, Y. Yang, E. Hovy, ``RACE: Large-scale ReAding Comprehension Dataset From Examinations", Proceedings of the 2017 Conference on Empirical Methods in Natural Language Processing, pp.785--794, 2017.
-% \bibitem{liang2019new} Y. Liang, J. Li, J. Yin, ``A new multi-choice reading comprehension dataset for curriculum learning", Asian Conference on Machine Learning, pp.742--757, 2019.
-% \bibitem{maeda2025field} H. Maeda, ``Field-testing multiple-choice questions with AI examinees: English grammar items", Educational and Psychological Measurement, Vol.85, No.2, pp.221--244, 2025.
-% \bibitem{council2001} Council of Europe, \textit{Common European Framework of Reference for Languages: Learning, Teaching, Assessment}, Cambridge University Press, 2001.
 \end{thebibliography}
 }
 \end{document}
